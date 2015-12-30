@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.SegoeUi.Light" parent="TextAppearance.AppCompat">
+        <item name="fontPath">fonts/segoe_ui_light.ttf</item>
+    </style>
+
+    <style name="TextAppearance.SegoeUi.Headline" parent="TextAppearance.AppCompat.Headline">
+        <item name="fontPath">fonts/segoe_ui_light.ttf</item>
+    </style>
+
+    <style name="TextAppearance.SegoeUi.Title" parent="TextAppearance.AppCompat.Title">
+        <item name="fontPath">fonts/segoe_ui_light.ttf</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.SegoeUi.Subhead" parent="TextAppearance.AppCompat.Subhead">
+        <item name="fontPath">fonts/segoe_ui_semilight.ttf</item>
+    </style>
+
+    <style name="TextAppearance.SegoeUi.Body1" parent="TextAppearance.AppCompat.Body1">
+        <item name="fontPath">fonts/segoe_ui_semilight.ttf</item>
+    </style>
+</resources>
