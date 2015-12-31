@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Elfec.Helpdesk">
         <activity android:name=".view.RequirementApproval"
+                  android:excludeFromRecents="true"
                   android:theme="@style/Theme.Elfec.Helpdesk.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,10 +24,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <action android:name="android.intent.action.VIEW" />
-                <!-- Accepts URIs that begin with "http://www.elfec.bo/helpdesk” -->
+                <!-- Accepts URIs that begin with "http://helpdesk.elfec.bo/requirements” -->
                 <data android:scheme="http"
-                      android:host="www.example.bo"
-                      android:pathPrefix="/helpdesk" />
+                      android:host="helpdesk.elfec.bo"
+                      android:pathPrefix="/requirements" />
                 <!-- note that the leading "/" is required for pathPrefix-->
                 <!-- Accepts URIs that begin with "elfec://helpdesk” -->
                 <data android:scheme="elfec"

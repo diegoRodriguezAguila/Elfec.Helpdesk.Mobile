@@ -10,12 +10,14 @@ import com.elfec.helpdesk.service.FloatingWindowService;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RequirementApproval extends AppCompatActivity{
-
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startService(new Intent(getApplication(), FloatingWindowService.class));
+        getIntent().getData();
+        Intent serviceIntent = new Intent(getApplication(),  FloatingWindowService.class);
+        startService(serviceIntent);
         finish();
     }
 

@@ -17,17 +17,21 @@ import android.view.WindowManager;
 
 import com.elfec.helpdesk.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FloatingWindowService extends Service {
 
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
-    private boolean mIsWindowShown;
+    private transient boolean mIsWindowShown;
     private WindowManager windowManager;
-    private View mFloatingEditTextView;
+    private View mRootView;
+    @Bind(R.id.btn_cancel)
+    protected AppCompatButton btnCancel;
 
-    WindowManager.LayoutParams params;
+    private WindowManager.LayoutParams mParams;
 
     @Override
     public void onCreate() {
@@ -39,12 +43,12 @@ public class FloatingWindowService extends Service {
 
     @SuppressLint("InflateParams")
     private void inflateViews() {
-        mFloatingEditTextView = LayoutInflater.from(
+        mRootView = LayoutInflater.from(
                 CalligraphyContextWrapper.wrap(new ContextThemeWrapper(this,
                         R.style.Theme_Elfec_Helpdesk))).inflate(
                 R.layout.activity_requirement_approval, null, false);
-        AppCompatButton button = (AppCompatButton)mFloatingEditTextView.findViewById(R.id.btn_cancel);
-        button.setOnClickListener(new View.OnClickListener() {
+        ButterKnife.bind(this, mRootView);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hide();
@@ -58,16 +62,16 @@ public class FloatingWindowService extends Service {
      * Pone el touch listener a los campos necesarios
      */
     private void setTouchListener() {
-        params = new WindowManager.LayoutParams(
+        mParams = new WindowManager.LayoutParams(
                 370,
-                320,
+                370,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.TOP | Gravity.START;
-        params.x = 90;
-        params.y = 100;
+        mParams.gravity = Gravity.TOP | Gravity.START;
+        mParams.x = 90;
+        mParams.y = 100;
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             private int initialX;
             private int initialY;
@@ -79,28 +83,27 @@ public class FloatingWindowService extends Service {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        initialX = params.x;
-                        initialY = params.y;
+                        initialX = mParams.x;
+                        initialY = mParams.y;
                         initialTouchX = event.getRawX();
                         initialTouchY = event.getRawY();
                         return true;
                     case MotionEvent.ACTION_UP:
                         return true;
                     case MotionEvent.ACTION_MOVE:
-                        params.x = initialX
+                        mParams.x = initialX
                                 + (int) (event.getRawX() - initialTouchX);
-                        params.y = initialY
+                        mParams.y = initialY
                                 + (int) (event.getRawY() - initialTouchY);
-                        windowManager.updateViewLayout(mFloatingEditTextView,
-                                params);
+                        windowManager.updateViewLayout(mRootView,
+                                mParams);
                         return true;
                 }
                 return false;
             }
         };
 
-        // this code is for dragging the chat head
-        mFloatingEditTextView.setOnTouchListener(touchListener);
+        mRootView.setOnTouchListener(touchListener);
     }
 
     @Override
@@ -114,7 +117,7 @@ public class FloatingWindowService extends Service {
      */
     public void show() {
         if (!mIsWindowShown) {
-            windowManager.addView(mFloatingEditTextView, params);
+            windowManager.addView(mRootView, mParams);
         }
         mIsWindowShown = true;
     }
@@ -123,8 +126,8 @@ public class FloatingWindowService extends Service {
      * Esconde el campo en ventana flotante
      */
     public void hide() {
-        if (mFloatingEditTextView != null && mIsWindowShown) {
-            windowManager.removeView(mFloatingEditTextView);
+        if (mRootView != null && mIsWindowShown) {
+            windowManager.removeView(mRootView);
             mIsWindowShown = false;
         }
     }

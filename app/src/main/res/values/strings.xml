@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Elfec Mesa de Ayuda</string>
+    <string name="btn_cancel">Cancelar</string>
 </resources>
