@@ -6,9 +6,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.AppCompatButton;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,6 +34,7 @@ public class FloatingWindowService extends Service {
         super.onCreate();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         inflateViews();
+        show();
     }
 
     @SuppressLint("InflateParams")
@@ -42,6 +43,14 @@ public class FloatingWindowService extends Service {
                 CalligraphyContextWrapper.wrap(new ContextThemeWrapper(this,
                         R.style.Theme_Elfec_Helpdesk))).inflate(
                 R.layout.activity_requirement_approval, null, false);
+        AppCompatButton button = (AppCompatButton)mFloatingEditTextView.findViewById(R.id.btn_cancel);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hide();
+                stopSelf();
+            }
+        });
         setTouchListener();
     }
 
@@ -50,10 +59,10 @@ public class FloatingWindowService extends Service {
      */
     private void setTouchListener() {
         params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                370,
+                320,
                 WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.TOP | Gravity.START;
@@ -105,8 +114,6 @@ public class FloatingWindowService extends Service {
      */
     public void show() {
         if (!mIsWindowShown) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-                inflateViews();
             windowManager.addView(mFloatingEditTextView, params);
         }
         mIsWindowShown = true;
