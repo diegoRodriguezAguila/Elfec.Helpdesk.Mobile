@@ -20,4 +20,12 @@
     <style name="TextAppearance.SegoeUi.Body1" parent="TextAppearance.AppCompat.Body1">
         <item name="fontPath">fonts/segoe_ui_semilight.ttf</item>
     </style>
+
+    <style name="Widget.Elfec.Helpdesk.Button.Negative"
+           parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Button</item>
+        <item name="colorButtonNormal">@color/negativeButtonBackground</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>

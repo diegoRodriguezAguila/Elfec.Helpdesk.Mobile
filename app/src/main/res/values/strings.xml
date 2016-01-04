@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Elfec Mesa de Ayuda</string>
+
+
     <string name="btn_cancel">Cancelar</string>
+    <string name="btn_ok">Aceptar</string>
+    <string name="btn_approve">Aprobar</string>
+    <string name="btn_reject">Rechazar</string>
 </resources>
