@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="TextAppearance.SegoeUi.Light" parent="TextAppearance.AppCompat">
-        <item name="fontPath">fonts/segoe_ui_light.ttf</item>
+
+    <style name="TextAppearance.Elfec.Helpdesk.Widget.ActionBar.Title"
+           parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="fontPath">fonts/helvetica_neue_light.otf</item>
     </style>
 
-    <style name="TextAppearance.SegoeUi.Headline" parent="TextAppearance.AppCompat.Headline">
-        <item name="fontPath">fonts/segoe_ui_light.ttf</item>
+    <style name="TextAppearance.HelveticaNeue.Light" parent="TextAppearance.AppCompat">
+        <item name="fontPath">fonts/helvetica_neue_light.otf</item>
     </style>
 
-    <style name="TextAppearance.SegoeUi.Title" parent="TextAppearance.AppCompat.Title">
-        <item name="fontPath">fonts/segoe_ui_light.ttf</item>
-        <item name="android:textSize">20sp</item>
+    <style name="TextAppearance.HelveticaNeue.Headline" parent="TextAppearance.AppCompat.Headline">
+        <item name="fontPath">fonts/helvetica_neue_light.otf</item>
     </style>
 
-    <style name="TextAppearance.SegoeUi.Subhead" parent="TextAppearance.AppCompat.Subhead">
-        <item name="fontPath">fonts/segoe_ui_semilight.ttf</item>
+    <style name="TextAppearance.HelveticaNeue.Title" parent="TextAppearance.AppCompat.Title">
+        <item name="fontPath">fonts/helvetica_neue_light.otf</item>
+        <item name="android:textSize">21sp</item>
     </style>
 
-    <style name="TextAppearance.SegoeUi.Body1" parent="TextAppearance.AppCompat.Body1">
-        <item name="fontPath">fonts/segoe_ui_semilight.ttf</item>
+    <style name="TextAppearance.HelveticaNeue.Subhead" parent="TextAppearance.AppCompat.Subhead">
+        <item name="fontPath">fonts/helvetica_neue_roman.otf</item>
+    </style>
+
+    <style name="TextAppearance.HelveticaNeue.Body1" parent="TextAppearance.AppCompat.Body1">
+        <item name="fontPath">fonts/helvetica_neue_roman.otf</item>
     </style>
 
     <style name="Widget.Elfec.Helpdesk.Button.Negative"

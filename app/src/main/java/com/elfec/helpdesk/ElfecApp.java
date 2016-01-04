@@ -12,7 +12,7 @@ public class ElfecApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-				.setDefaultFontPath("fonts/segoe_ui.ttf").setFontAttrId(R.attr.fontPath).build());
+				.setDefaultFontPath("fonts/helvetica_neue_roman.otf").setFontAttrId(R.attr.fontPath).build());
 	}
 
 }
