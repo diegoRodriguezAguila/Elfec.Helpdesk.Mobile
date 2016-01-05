@@ -8,6 +8,14 @@
     <string name="btn_approve">Aprobar</string>
     <string name="btn_reject">Rechazar</string>
 
+
+    <!-- Error titles -->
+    <string name="title_no_url_data">Error en los datos</string>
+    <!-- Error messages -->
+    <string name="msg_no_url_data">No se recibieron los datos necesarios para iniciar esta
+        aplicación. Para iniciarla de forma correcta porfavor abrala desde los links provistos en
+        los correos de aprobación/rechazo de requerimientos.</string>
+
     <!-- Samples -->
     <string name="sample_req_id">R1234</string>
 </resources>

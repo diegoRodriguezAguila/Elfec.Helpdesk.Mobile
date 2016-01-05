@@ -6,53 +6,26 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.graphics.Typeface;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatRadioButton;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
-import com.elfec.helpdesk.R;
+import com.elfec.helpdesk.service.floating_window.AbstractFloatingWindowView;
+import com.elfec.helpdesk.service.floating_window.IFloatingWindowService;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
-public class FloatingWindowService extends Service {
+public class FloatingWindowService extends Service implements IFloatingWindowService {
 
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
     private transient boolean mIsWindowShown;
     private WindowManager windowManager;
+
     private View mRootView;
-
-    @Bind(R.id.txt_requirement_title)
-    protected TextView txtRequirementTitle;
-
-    @Bind(R.id.radio_group_action)
-    protected RadioGroup radioGroupAction;
-    @Bind(R.id.rbtn_approve)
-    protected AppCompatRadioButton rbtnApprove;
-    @Bind(R.id.rbtn_reject)
-    protected AppCompatRadioButton rbtnReject;
-
-    @Bind(R.id.txt_reject_reason)
-    protected TextInputLayout txtRejectReason;
-
-    @Bind(R.id.btn_cancel)
-    protected AppCompatButton btnCancel;
-    @Bind(R.id.btn_proceed)
-    protected AppCompatButton btnProceed;
 
     private WindowManager.LayoutParams mParams;
 
@@ -60,75 +33,17 @@ public class FloatingWindowService extends Service {
     public void onCreate() {
         super.onCreate();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        inflateViews();
-        show();
+    }
+
+    @Override
+    public int onStartCommand (Intent intent, int flags, int startId){
+
+        return START_REDELIVER_INTENT;
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-    @SuppressLint("InflateParams")
-    private void inflateViews() {
-        mRootView = LayoutInflater.from(new ContextThemeWrapper(this,
-                        R.style.Theme_Elfec_Helpdesk)).inflate(
-                R.layout.activity_requirement_approval, null, false);
-        ButterKnife.bind(this, mRootView);
-        setButtonsClickListeners();
-        setTouchListener();
-        setFontToAppcompatViews();
-    }
-
-    /**
-     * Pone la custom font a las vistas appcompat a las cuales no se les aplica por alguna razon
-     * la fuente de forma automática
-     */
-    private void setFontToAppcompatViews() {
-        Typeface font = TypefaceUtils.load(getAssets(),
-                "fonts/helvetica_neue_roman.otf");
-        if(txtRejectReason.getEditText() != null)
-            txtRejectReason.getEditText().setTypeface(font);
-        txtRejectReason.setTypeface(font);
-        rbtnApprove.setTypeface(font);
-        rbtnReject.setTypeface(font);
-        btnCancel.setTypeface(font);
-        btnProceed.setTypeface(font);
-    }
-
-    /**
-     * Pone los click listeners se los botones
-     */
-    private void setButtonsClickListeners() {
-        radioGroupAction.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case (R.id.rbtn_approve):
-                        btnProceed.setText(R.string.btn_approve);
-                        txtRejectReason.setVisibility(View.GONE);
-                        break;
-                    case (R.id.rbtn_reject):
-                        btnProceed.setText(R.string.btn_reject);
-                        txtRejectReason.setVisibility(View.VISIBLE);
-                        break;
-                }
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hide();
-                stopSelf();
-            }
-        });
-        btnProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hide();
-                stopSelf();
-            }
-        });
     }
 
     /**
@@ -187,8 +102,14 @@ public class FloatingWindowService extends Service {
      * Muestra el campo en ventana flotante
      *
      */
-    public void show() {
+    @Override
+    public void show(AbstractFloatingWindowView view) {
+        if(view==null)
+            throw new IllegalArgumentException("view cannot be null dude");
         if (!mIsWindowShown) {
+            mRootView = view.getRootView();
+            view.bindToService(this);
+            setTouchListener();
             windowManager.addView(mRootView, mParams);
         }
         mIsWindowShown = true;
@@ -197,11 +118,21 @@ public class FloatingWindowService extends Service {
     /**
      * Esconde el campo en ventana flotante
      */
+    @Override
     public void hide() {
         if (mRootView != null && mIsWindowShown) {
             windowManager.removeView(mRootView);
             mIsWindowShown = false;
         }
+    }
+
+    /**
+     * Esconde la ventana flotante y detiene el servicio
+     */
+    @Override
+    public void exit(){
+        hide();
+        stopSelf();
     }
 
     /**
@@ -212,6 +143,7 @@ public class FloatingWindowService extends Service {
     public boolean isWindowShown() {
         return mIsWindowShown;
     }
+
 
     /**
      * Binder para la clase

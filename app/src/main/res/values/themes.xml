@@ -17,6 +17,9 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/backgroundColor</item>
+        <item name="android:textSelectHandleLeft">@drawable/text_select_handle_left_material</item>
+        <item name="android:textSelectHandleRight">@drawable/text_select_handle_right_material</item>
+        <item name="android:textSelectHandle">@drawable/text_select_handle_middle_material</item>
     </style>
 
 </resources>
