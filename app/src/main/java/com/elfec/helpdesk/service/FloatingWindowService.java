@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,12 +38,6 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
     }
 
     @Override
-    public int onStartCommand (Intent intent, int flags, int startId){
-
-        return START_REDELIVER_INTENT;
-    }
-
-    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
@@ -59,38 +55,7 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
         mParams.gravity = Gravity.TOP | Gravity.START;
         mParams.x = 90;
         mParams.y = 100;
-        View.OnTouchListener touchListener = new View.OnTouchListener() {
-            private int initialX;
-            private int initialY;
-            private float initialTouchX;
-            private float initialTouchY;
-
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        initialX = mParams.x;
-                        initialY = mParams.y;
-                        initialTouchX = event.getRawX();
-                        initialTouchY = event.getRawY();
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        mParams.x = initialX
-                                + (int) (event.getRawX() - initialTouchX);
-                        mParams.y = initialY
-                                + (int) (event.getRawY() - initialTouchY);
-                        windowManager.updateViewLayout(mRootView,
-                                mParams);
-                        return true;
-                }
-                return false;
-            }
-        };
-
-        mRootView.setOnTouchListener(touchListener);
+        mRootView.setOnTouchListener(new FloatingWindowTouchListener());
     }
 
     @Override
@@ -103,7 +68,7 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
      *
      */
     @Override
-    public void show(AbstractFloatingWindowView view) {
+    public void show(@Nullable AbstractFloatingWindowView view) {
         if(view==null)
             throw new IllegalArgumentException("view cannot be null dude");
         if (!mIsWindowShown) {
@@ -144,6 +109,7 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
         return mIsWindowShown;
     }
 
+    //region Inner Classes
 
     /**
      * Binder para la clase
@@ -151,8 +117,47 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
      * @author drodriguez
      */
     public class LocalBinder extends Binder {
+        @NonNull
         public FloatingWindowService getService() {
             return FloatingWindowService.this;
         }
     }
+
+    /**
+     * Clase de touch listener para la vista de la
+     * ventana flotante
+     */
+    private class FloatingWindowTouchListener implements View.OnTouchListener {
+
+        private int initialX;
+        private int initialY;
+        private float initialTouchX;
+        private float initialTouchY;
+
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    initialX = mParams.x;
+                    initialY = mParams.y;
+                    initialTouchX = event.getRawX();
+                    initialTouchY = event.getRawY();
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    mParams.x = initialX
+                            + (int) (event.getRawX() - initialTouchX);
+                    mParams.y = initialY
+                            + (int) (event.getRawY() - initialTouchY);
+                    windowManager.updateViewLayout(mRootView,
+                            mParams);
+                    return true;
+            }
+            return false;
+        }
+    }
+
+    //endregion
 }

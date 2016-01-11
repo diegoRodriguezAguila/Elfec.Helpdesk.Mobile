@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Elfec Mesa de Ayuda</string>
-    <string name="lbl_reject_reason">Motivo de rechazo</string>
 
+    <!-- Requirement Approval -->
+    <string name="lbl_reject_reason">Motivo de rechazo</string>
+    <string name="msg_no_reject_reason">El motivo de rechazo no puede estar en blanco</string>
 
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_ok">Aceptar</string>

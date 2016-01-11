@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Elfec.Helpdesk">
-        <activity android:name=".view.RequirementApproval"
+        <activity android:name=".view.StarterActivity"
                   android:excludeFromRecents="true"
                   android:theme="@style/Theme.Elfec.Helpdesk.NoDisplay">
             <intent-filter>

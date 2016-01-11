@@ -12,7 +12,7 @@
     android:paddingLeft="@dimen/window_horizontal_margin"
     android:paddingRight="@dimen/window_horizontal_margin"
     android:paddingTop="@dimen/window_vertical_margin"
-    tools:context=".view.RequirementApproval">
+    tools:context=".view.StarterActivity">
 
     <TextView
         android:layout_width="match_parent"

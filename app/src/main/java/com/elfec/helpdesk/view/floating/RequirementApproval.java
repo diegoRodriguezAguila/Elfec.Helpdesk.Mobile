@@ -3,6 +3,8 @@ package com.elfec.helpdesk.view.floating;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.AppCompatButton;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.elfec.helpdesk.R;
 import com.elfec.helpdesk.helpers.ui.ButtonClicksHelper;
@@ -25,7 +28,7 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 /**
  * Vista para ventana flotante de aprovacion de requerimientos
  */
-public class RequirementApprovalView extends AbstractFloatingWindowView implements IRequirementApprovalView {
+public class RequirementApproval extends AbstractFloatingWindowView implements IRequirementApprovalView {
 
     private View mRootView;
 
@@ -49,7 +52,7 @@ public class RequirementApprovalView extends AbstractFloatingWindowView implemen
     @Bind(R.id.btn_proceed)
     protected AppCompatButton btnProceed;
 
-    public RequirementApprovalView(Context context) {
+    public RequirementApproval(Context context) {
         super(context);
         inflateViews();
         presenter = new RequirementApprovalPresenter(this);
@@ -72,7 +75,7 @@ public class RequirementApprovalView extends AbstractFloatingWindowView implemen
     private void setFontToAppcompatViews() {
         Typeface font = TypefaceUtils.load(getContext().getAssets(),
                 "fonts/helvetica_neue_roman.otf");
-        if(txtRejectReason.getEditText() != null)
+        if (txtRejectReason.getEditText() != null)
             txtRejectReason.getEditText().setTypeface(font);
         txtRejectReason.setTypeface(font);
         rbtnApprove.setTypeface(font);
@@ -115,7 +118,6 @@ public class RequirementApprovalView extends AbstractFloatingWindowView implemen
                     if (rbtnApprove.isChecked())
                         presenter.approveRequirement();
                     else presenter.rejectRequirement();
-                    getService().exit();
                 }
             }
         });
@@ -128,10 +130,21 @@ public class RequirementApprovalView extends AbstractFloatingWindowView implemen
 
     //region Interface Methods
 
+    @Nullable
     @Override
     public String getRejectReason() {
-        return txtRejectReason.getEditText() == null? null :
-                txtRejectReason.getEditText().getText().toString();
+        return txtRejectReason.getEditText() == null ? null :
+                txtRejectReason.getEditText().getText().toString().trim();
+    }
+
+    @Override
+    public void showMessage(@StringRes int message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void finish() {
+        getService().exit();
     }
     //endregion
 }

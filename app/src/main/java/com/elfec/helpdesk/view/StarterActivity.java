@@ -13,13 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.elfec.helpdesk.R;
 import com.elfec.helpdesk.service.FloatingWindowService;
-import com.elfec.helpdesk.view.floating.RequirementApprovalView;
+import com.elfec.helpdesk.view.floating.RequirementApproval;
 
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class RequirementApproval extends AppCompatActivity implements ServiceConnection {
+public class StarterActivity extends AppCompatActivity implements ServiceConnection {
 
 
     @Override
@@ -38,7 +38,6 @@ public class RequirementApproval extends AppCompatActivity implements ServiceCon
             Intent serviceIntent = new Intent(getApplication(), FloatingWindowService.class);
             startService(serviceIntent);
             bindService(serviceIntent, this, Context.BIND_AUTO_CREATE);
-            finish();
         }
     }
 
@@ -65,8 +64,9 @@ public class RequirementApproval extends AppCompatActivity implements ServiceCon
     public void onServiceConnected(ComponentName name, IBinder service) {
         FloatingWindowService.LocalBinder binder = (FloatingWindowService.LocalBinder) service;
         FloatingWindowService mService = binder.getService();
-        mService.show(new RequirementApprovalView(this));
+        mService.show(new RequirementApproval(this));
         unbindService(this);
+        finish();
     }
 
     @Override
