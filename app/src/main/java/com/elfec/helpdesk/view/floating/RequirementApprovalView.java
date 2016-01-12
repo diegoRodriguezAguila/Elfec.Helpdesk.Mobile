@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.elfec.helpdesk.R;
 import com.elfec.helpdesk.helpers.ui.ButtonClicksHelper;
+import com.elfec.helpdesk.model.RequirementApproval;
 import com.elfec.helpdesk.presenter.RequirementApprovalPresenter;
 import com.elfec.helpdesk.presenter.views.IRequirementApprovalView;
 import com.elfec.helpdesk.service.floating_window.AbstractFloatingWindowView;
@@ -28,7 +29,7 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 /**
  * Vista para ventana flotante de aprovacion de requerimientos
  */
-public class RequirementApproval extends AbstractFloatingWindowView implements IRequirementApprovalView {
+public class RequirementApprovalView extends AbstractFloatingWindowView implements IRequirementApprovalView {
 
     private View mRootView;
 
@@ -52,10 +53,18 @@ public class RequirementApproval extends AbstractFloatingWindowView implements I
     @Bind(R.id.btn_proceed)
     protected AppCompatButton btnProceed;
 
-    public RequirementApproval(Context context) {
+    public RequirementApprovalView(Context context, String requirementId,
+                                   RequirementApproval requirementApproval) {
         super(context);
+        if(requirementId==null)
+            throw new NullPointerException("requirementId can't be null");
+        if(requirementApproval==null || requirementApproval.getUserCode()==null ||
+                requirementApproval.getRequestUser()==null)
+            throw new NullPointerException("requirementApproval can't be null, nor its userCode " +
+                    "and requestUser");
         inflateViews();
-        presenter = new RequirementApprovalPresenter(this);
+        txtRequirementTitle.setText(requirementId);
+        presenter = new RequirementApprovalPresenter(this, requirementId, requirementApproval);
     }
 
     @SuppressLint("InflateParams")
@@ -138,7 +147,7 @@ public class RequirementApproval extends AbstractFloatingWindowView implements I
     }
 
     @Override
-    public void showMessage(@StringRes int message) {
+    public void setMessage(@StringRes int message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 

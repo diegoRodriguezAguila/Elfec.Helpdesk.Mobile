@@ -18,7 +18,7 @@ import retrofit2.Retrofit;
 
 /**
  * Factory para obtener el Endpoint de los webservices
- * Utilizando la configuración de RestAdapter necesaria
+ * Utilizando la configuraciÃ³n de RestAdapter necesaria
  */
 public class RestEndpointFactory {
 
@@ -50,7 +50,7 @@ public class RestEndpointFactory {
 
     /**
      * Crea un endpoint Rest  con la url por defecto {@link RestEndpointFactory#BASE_URL}
-     * y con los headers de autenticación con token necesarios
+     * y con los headers de autenticaciÃ³n con token necesarios
      *
      * @return Endpoint
      */
@@ -60,20 +60,19 @@ public class RestEndpointFactory {
 
     /**
      * Crea un endpoint Rest con la url especificada
-     * y con los headers de autenticación con token necesarios
+     * y con los headers de autenticaciÃ³n con token necesarios
      *
      * @param url especificada
      * @return Instancia de endpoint
      */
     public static <T> T create(@NonNull String url, @NonNull Class<T> endpoint, @Nullable
     HelpdeskApiCredential credentials) {
-        OkHttpClient httpClient = buildClient(credentials);
         return new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
                         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                         .create()))
-                .client(httpClient)
+                .client(buildClient(credentials))
                 .build().create(endpoint);
     }
 
@@ -85,23 +84,22 @@ public class RestEndpointFactory {
      */
     @NonNull
     private static OkHttpClient buildClient(@Nullable final HelpdeskApiCredential credentials) {
-        OkHttpClient httpClient = new OkHttpClient();
-        httpClient.interceptors().add(new Interceptor() {
-            @Override
-            public Response intercept(@NonNull Chain chain) throws IOException {
-                Request request = chain.request();
-                if (credentials != null && credentials.getDeviceId() != null && credentials
-                        .getToken() != null) {
-                    request = request.newBuilder()
-                            .header("X-Api-DeviceId", credentials.getDeviceId())
-                            .header("X-Api-Token", credentials.getToken())
-                            .method(request.method(), request.body())
-                            .build();
-                }
+        return new OkHttpClient().newBuilder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(@NonNull Chain chain) throws IOException {
+                        Request request = chain.request();
+                        if (credentials != null && credentials.getDeviceId() != null &&
+                                credentials.getToken() != null) {
+                            request = request.newBuilder()
+                                    .header("X-Api-DeviceId", credentials.getDeviceId())
+                                    .header("X-Api-Token", credentials.getToken())
+                                    .method(request.method(), request.body())
+                                    .build();
+                        }
 
-                return chain.proceed(request);
-            }
-        });
-        return httpClient;
+                        return chain.proceed(request);
+                    }
+                }).build();
     }
 }

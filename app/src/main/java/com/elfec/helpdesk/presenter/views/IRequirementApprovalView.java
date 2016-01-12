@@ -14,7 +14,7 @@ public interface IRequirementApprovalView {
      * Muestra un mensaje al usuario
      * @param message message
      */
-    void showMessage(@StringRes int message);
+    void setMessage(@StringRes int message);
 
     /**
      * Finaliza la vista

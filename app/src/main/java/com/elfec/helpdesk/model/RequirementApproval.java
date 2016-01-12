@@ -5,11 +5,31 @@ package com.elfec.helpdesk.model;
  */
 public class RequirementApproval {
 
+    /**
+     * RequirementApproval with approved status
+     */
+    public static final String STATUS_APPROVED = "Approved";
+    /**
+     * RequirementApproval with rejected status
+     */
+    public static final String STATUS_REJECTED = "Rejected";
+
     private String status;
     private String userCode;
     private String requestUser;
     private String rejectReason;
 
+    public RequirementApproval(){}
+
+    /**
+     * Constructor for RequirementApproval
+     * @param userCode user code
+     * @param requestUser requester user
+     */
+    public RequirementApproval(String userCode, String requestUser) {
+        this.userCode = userCode;
+        this.requestUser = requestUser;
+    }
 
     //region Getters Setters
 
@@ -18,9 +38,11 @@ public class RequirementApproval {
     }
 
     public void setStatus(String status) {
+        if(status==null || !status.equals(STATUS_APPROVED)
+                || !status.equals(STATUS_REJECTED))
+            throw new IllegalArgumentException("Invalid status value");
         this.status = status;
     }
-
     public String getUserCode() {
         return userCode;
     }

@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import java.lang.ref.SoftReference;
 
 /**
- * Maneja las sharedpreferences de toda la aplicaci髇
+ * Maneja las sharedpreferences de toda la aplicaci贸n
  *
  * @author Diego
  */
@@ -21,7 +21,7 @@ public class AppPreferences {
      */
     private static Context context;
     /**
-     * Referencia d閎il de la instancia de appPreferences
+     * Referencia d茅bil de la instancia de appPreferences
      */
     private static SoftReference<AppPreferences> appPreferencesInstanceRef;
 
@@ -33,7 +33,7 @@ public class AppPreferences {
 
 
     /**
-     * Este m閠odo se debe llamar al inicializar la aplicaci髇
+     * Este m茅todo se debe llamar al inicializar la aplicaci贸n
      *
      * @param context context
      */
@@ -42,9 +42,9 @@ public class AppPreferences {
     }
 
     /**
-     * Obtiene el contexto de la aplicaci髇
+     * Obtiene el contexto de la aplicaci贸n
      *
-     * @return el contexto de la aplicaci髇
+     * @return el contexto de la aplicaci贸n
      */
     public static Context getApplicationContext() {
         return AppPreferences.context;

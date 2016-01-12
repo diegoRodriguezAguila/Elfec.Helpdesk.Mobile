@@ -9,7 +9,6 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,7 +67,7 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
      *
      */
     @Override
-    public void show(@Nullable AbstractFloatingWindowView view) {
+    public void show(AbstractFloatingWindowView view) {
         if(view==null)
             throw new IllegalArgumentException("view cannot be null dude");
         if (!mIsWindowShown) {
