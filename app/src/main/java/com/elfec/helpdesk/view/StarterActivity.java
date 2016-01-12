@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
@@ -16,6 +15,8 @@ import com.elfec.helpdesk.R;
 import com.elfec.helpdesk.model.RequirementApproval;
 import com.elfec.helpdesk.service.FloatingWindowService;
 import com.elfec.helpdesk.view.floating.RequirementApprovalView;
+
+import java.util.regex.Pattern;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -28,11 +29,11 @@ public class StarterActivity extends AppCompatActivity implements ServiceConnect
         super.onCreate(savedInstanceState);
         Uri data = getIntent().getData();
         //<editor-fold desc="test prupouses don't forget to delete TODO">
-        if(data == null)
+        if (data == null)
             data = Uri.parse("http://helpdesk.elfec" +
                     ".bo/requirements/R1112?user_code=DROD01&request_user=RMAL01");
         //</editor-fold>
-        if (data == null || !initRequirementApprovalView(data)) {
+        if (!initRequirementApprovalView(data)) {
             showNoDataDialog();
         } else {
             Intent serviceIntent = new Intent(getApplication(), FloatingWindowService.class);
@@ -47,7 +48,7 @@ public class StarterActivity extends AppCompatActivity implements ServiceConnect
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         mRequirementApprovalView = null;
     }
@@ -58,15 +59,18 @@ public class StarterActivity extends AppCompatActivity implements ServiceConnect
     /**
      * Inicializa la vista de aprobación/rechazo de requerimientos
      * si la inicialización es correcta retorna true
+     *
      * @param data URL de donde sacar los datos
      * @return true si la inicialización fue correcta
      */
-    private boolean initRequirementApprovalView(@NonNull Uri data) {
+    private boolean initRequirementApprovalView(Uri data) {
+        if (data == null)
+            return false;
         String reqId = data.getLastPathSegment();
         String userCode = data.getQueryParameter("user_code");
         String requestUser = data.getQueryParameter("request_user");
         //bad parameters
-        if(reqId==null || userCode==null || requestUser==null)
+        if (!validRequirementId(reqId) || userCode == null || requestUser == null)
             return false;
         mRequirementApprovalView = new RequirementApprovalView(this, reqId, new RequirementApproval(userCode,
                 requestUser));
@@ -74,11 +78,24 @@ public class StarterActivity extends AppCompatActivity implements ServiceConnect
     }
 
     /**
+     * Verifica que el Id del requerimiento no sea nulo y
+     * esté bien formada
+     *
+     * @param reqId Id del requerimiento
+     * @return true si es válido
+     */
+    private boolean validRequirementId(String reqId) {
+        return reqId != null && Pattern.compile("R[0-9]*")
+                .matcher(reqId)
+                .matches();
+    }
+
+    /**
      * Muestra dialogo de que no se pasó la información necesaria para iniciar la app
      */
-    public void showNoDataDialog() {
+    private void showNoDataDialog() {
         new AlertDialog.Builder(this).setTitle(R.string.title_no_url_data)
-                .setIcon(R.mipmap.ic_launcher)
+                .setIcon(R.drawable.helpdesk_error)
                 .setMessage(R.string.msg_no_url_data)
                 .setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
                     @Override

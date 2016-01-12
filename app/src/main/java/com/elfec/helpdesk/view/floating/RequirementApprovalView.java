@@ -6,17 +6,20 @@ import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elfec.helpdesk.R;
 import com.elfec.helpdesk.helpers.ui.ButtonClicksHelper;
+import com.elfec.helpdesk.model.Requirement;
 import com.elfec.helpdesk.model.RequirementApproval;
 import com.elfec.helpdesk.presenter.RequirementApprovalPresenter;
 import com.elfec.helpdesk.presenter.views.IRequirementApprovalView;
@@ -27,9 +30,10 @@ import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 /**
- * Vista para ventana flotante de aprovacion de requerimientos
+ * Vista para ventana flotante de aprobacion de requerimientos
  */
-public class RequirementApprovalView extends AbstractFloatingWindowView implements IRequirementApprovalView {
+public class RequirementApprovalView extends AbstractFloatingWindowView
+        implements IRequirementApprovalView {
 
     private View mRootView;
 
@@ -152,8 +156,29 @@ public class RequirementApprovalView extends AbstractFloatingWindowView implemen
     }
 
     @Override
-    public void finish() {
-        getService().exit();
+    public void setError(@StringRes int title, String message) {
+        AlertDialog dialog = new AlertDialog.Builder(getContext()).setTitle(title)
+                .setIcon(R.drawable.helpdesk_error)
+                .setMessage(message)
+                .setPositiveButton(R.string.btn_ok, null).create();
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.show();
     }
+
+    @Override
+    public void setError(@StringRes int title, @StringRes int message) {
+        setError(title, getContext().getResources().getString(message));
+    }
+
+    @Override
+    public void showProcessing() {
+
+    }
+
+    @Override
+    public void setResult(Requirement requirement) {
+
+    }
+
     //endregion
 }

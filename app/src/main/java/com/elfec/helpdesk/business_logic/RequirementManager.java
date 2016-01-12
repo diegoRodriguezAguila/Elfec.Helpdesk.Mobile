@@ -7,7 +7,6 @@ import com.elfec.helpdesk.security.CredentialManager;
 import com.elfec.helpdesk.web_service.RestEndpointFactory;
 import com.elfec.helpdesk.web_service.api_endpoints.IRequirementsEndpoint;
 
-import retrofit2.Call;
 import retrofit2.Callback;
 
 
@@ -24,12 +23,10 @@ public class RequirementManager {
      */
     public static void updateApprovalStatus(String requirementId, RequirementApproval
             requirementApproval, Callback<Requirement> callback){
-        new CredentialManager(AppPreferences.getApplicationContext());
-
-        Call<Requirement> call = RestEndpointFactory.create(IRequirementsEndpoint.class, new CredentialManager
-                (AppPreferences.getApplicationContext()).generateApiCredentials())
-                .updateApprovalStatus(requirementId, requirementApproval);
-
-        call.enqueue(callback);
+        RestEndpointFactory.create(IRequirementsEndpoint.class, new CredentialManager
+                (AppPreferences.getApplicationContext())
+                .generateApiCredentials())
+                .updateApprovalStatus(requirementId, requirementApproval)
+                .enqueue(callback);
     }
 }

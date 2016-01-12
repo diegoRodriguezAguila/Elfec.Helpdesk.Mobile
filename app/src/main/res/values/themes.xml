@@ -1,5 +1,13 @@
 <resources>
 
+    <!-- Alert Dialog AppCompat -->
+    <style name="Theme.Elfec.Helpdesk.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
     <style name="Theme.Elfec.Helpdesk.NoDisplay" parent="Theme.Elfec.Helpdesk" >
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@android:color/transparent</item>
@@ -20,6 +28,9 @@
         <item name="android:textSelectHandleLeft">@drawable/text_select_handle_left_material</item>
         <item name="android:textSelectHandleRight">@drawable/text_select_handle_right_material</item>
         <item name="android:textSelectHandle">@drawable/text_select_handle_middle_material</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="alertDialogTheme">@style/Theme.Elfec.Helpdesk.AlertDialog</item>
     </style>
 
 </resources>

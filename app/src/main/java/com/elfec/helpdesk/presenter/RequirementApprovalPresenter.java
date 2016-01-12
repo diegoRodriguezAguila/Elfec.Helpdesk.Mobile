@@ -2,9 +2,11 @@ package com.elfec.helpdesk.presenter;
 
 import com.elfec.helpdesk.R;
 import com.elfec.helpdesk.business_logic.RequirementManager;
+import com.elfec.helpdesk.helpers.ui.ExceptionInterpreter;
 import com.elfec.helpdesk.model.Requirement;
 import com.elfec.helpdesk.model.RequirementApproval;
 import com.elfec.helpdesk.presenter.views.IRequirementApprovalView;
+import com.elfec.helpdesk.web_service.ApiErrorFactory;
 
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,6 +52,7 @@ public class RequirementApprovalPresenter {
 
     /**
      * Llama a la logica de negocio de aprobación/rechazo de requerimientos
+     *
      * @param requirementApproval request de aprobación/rechazo
      */
     private void updateApprovalStatus(RequirementApproval requirementApproval) {
@@ -57,14 +60,17 @@ public class RequirementApprovalPresenter {
                 new Callback<Requirement>() {
                     @Override
                     public void onResponse(Response<Requirement> response) {
-                        mView.setMessage(R.string.msg_no_url_data);
-                        mView.finish();
+                        if (response.isSuccess()) {
+                            response.body();
+                            mView.setMessage(R.string.msg_no_url_data);
+                        } else mView.setError(R.string.title_approval_error, ApiErrorFactory.build
+                                (response).getMessage());
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
-                        mView.setMessage(R.string.msg_no_reject_reason);
-                        mView.finish();
+                        mView.setError(R.string.title_approval_error, ExceptionInterpreter
+                                .interpretException(t));
                     }
                 });
     }

@@ -38,9 +38,9 @@ public class RequirementApproval {
     }
 
     public void setStatus(String status) {
-        if(status==null || !status.equals(STATUS_APPROVED)
-                || !status.equals(STATUS_REJECTED))
-            throw new IllegalArgumentException("Invalid status value");
+        if(status==null || !(status.equals(STATUS_APPROVED)
+                || status.equals(STATUS_REJECTED)))
+            throw new IllegalArgumentException("Invalid status value: "+status);
         this.status = status;
     }
     public String getUserCode() {

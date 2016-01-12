@@ -13,10 +13,17 @@
 
     <!-- Error titles -->
     <string name="title_no_url_data">Error en los datos</string>
+    <string name="title_approval_error">Error de solicitud</string>
     <!-- Error messages -->
     <string name="msg_no_url_data">No se recibieron los datos necesarios para iniciar esta
         aplicación. Para iniciarla de forma correcta porfavor abrala desde los links provistos en
         los correos de aprobación/rechazo de requerimientos.</string>
+
+    <string name="msg_connection_error">No se pudo conectar con el servidor. Revise su
+        conexión a internet.</string>
+
+    <string name="msg_unexpected_error">Ocurrió un error inesperado. Inténtelo nuevamente más tarde.
+    </string>
 
     <!-- Samples -->
     <string name="sample_req_id">R1234</string>
