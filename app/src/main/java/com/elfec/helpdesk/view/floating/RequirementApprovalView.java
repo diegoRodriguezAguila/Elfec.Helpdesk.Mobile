@@ -1,12 +1,17 @@
 package com.elfec.helpdesk.view.floating;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -60,10 +65,10 @@ public class RequirementApprovalView extends AbstractFloatingWindowView
     public RequirementApprovalView(Context context, String requirementId,
                                    RequirementApproval requirementApproval) {
         super(context);
-        if(requirementId==null)
+        if (requirementId == null)
             throw new NullPointerException("requirementId can't be null");
-        if(requirementApproval==null || requirementApproval.getUserCode()==null ||
-                requirementApproval.getRequestUser()==null)
+        if (requirementApproval == null || requirementApproval.getUserCode() == null ||
+                requirementApproval.getRequestUser() == null)
             throw new NullPointerException("requirementApproval can't be null, nor its userCode " +
                     "and requestUser");
         inflateViews();
@@ -128,6 +133,7 @@ public class RequirementApprovalView extends AbstractFloatingWindowView
             @Override
             public void onClick(View v) {
                 if (ButtonClicksHelper.canClickButton()) {
+                    getService().hide(true);
                     if (rbtnApprove.isChecked())
                         presenter.approveRequirement();
                     else presenter.rejectRequirement();
@@ -157,6 +163,14 @@ public class RequirementApprovalView extends AbstractFloatingWindowView
 
     @Override
     public void setError(@StringRes int title, String message) {
+        builder.setProgress(0, 0, false).setContentText(message)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setContentTitle(getContext().getResources().getString(title))
+                .setSound(Uri.parse("android.resource://" + getContext().getPackageName() + "/" +
+                        R.raw.error_sound))
+                .setVibrate(new long[]{0, 500});
+        notifManager.notify(267, builder.build());
         AlertDialog dialog = new AlertDialog.Builder(getContext()).setTitle(title)
                 .setIcon(R.drawable.helpdesk_error)
                 .setMessage(message)
@@ -170,9 +184,27 @@ public class RequirementApprovalView extends AbstractFloatingWindowView
         setError(title, getContext().getResources().getString(message));
     }
 
+
+    NotificationCompat.Builder builder;
+    NotificationManager notifManager;
+
     @Override
     public void showProcessing() {
-
+        final Context context = getContext();
+        builder = new NotificationCompat.Builder(context);
+        builder.setOngoing(true)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.notif_error))
+                        .setSmallIcon(R.drawable.notification_small)
+                        .setContentTitle(context.getResources().getString(R.string
+                                .title_processing_approval))
+                        .setContentText(context.getResources().getString(R.string.msg_processing_approval))
+                        .setCategory(NotificationCompat.CATEGORY_PROGRESS)
+                        .setProgress(0, 0, true)
+                        .setColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        notifManager = (NotificationManager) context.getSystemService(Context
+                .NOTIFICATION_SERVICE);
+        notifManager.notify(267, builder.build());
     }
 
     @Override

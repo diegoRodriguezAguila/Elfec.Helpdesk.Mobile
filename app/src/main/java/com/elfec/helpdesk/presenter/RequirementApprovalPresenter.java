@@ -56,14 +56,14 @@ public class RequirementApprovalPresenter {
      * @param requirementApproval request de aprobación/rechazo
      */
     private void updateApprovalStatus(RequirementApproval requirementApproval) {
+        mView.showProcessing();
         RequirementManager.updateApprovalStatus(mRequirementId, requirementApproval,
                 new Callback<Requirement>() {
                     @Override
                     public void onResponse(Response<Requirement> response) {
-                        if (response.isSuccess()) {
-                            response.body();
-                            mView.setMessage(R.string.msg_no_url_data);
-                        } else mView.setError(R.string.title_approval_error, ApiErrorFactory.build
+                        if (response.isSuccess())
+                            mView.setResult(response.body());
+                        else mView.setError(R.string.title_approval_error, ApiErrorFactory.build
                                 (response).getMessage());
                     }
 

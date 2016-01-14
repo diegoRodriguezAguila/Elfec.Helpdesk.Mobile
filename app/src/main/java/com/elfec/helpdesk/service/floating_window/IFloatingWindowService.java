@@ -13,8 +13,9 @@ public interface IFloatingWindowService {
 
     /**
      * Esconde la ventana
+     * @param minimize Si esta en true esconde la ventana con otra animación
      */
-    void hide();
+    void hide(boolean minimize);
 
     /**
      * Esconde la ventana y detiene el servicio

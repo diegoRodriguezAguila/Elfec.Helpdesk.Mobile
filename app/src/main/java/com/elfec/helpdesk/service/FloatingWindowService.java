@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.elfec.helpdesk.R;
 import com.elfec.helpdesk.service.floating_window.AbstractFloatingWindowView;
 import com.elfec.helpdesk.service.floating_window.IFloatingWindowService;
 
@@ -54,6 +55,7 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
         mParams.gravity = Gravity.TOP | Gravity.START;
         mParams.x = 90;
         mParams.y = 100;
+        mParams.windowAnimations = R.style.PopupAnimation;
         mRootView.setOnTouchListener(new FloatingWindowTouchListener());
     }
 
@@ -83,8 +85,12 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
      * Esconde el campo en ventana flotante
      */
     @Override
-    public void hide() {
+    public void hide(boolean minimize) {
         if (mRootView != null && mIsWindowShown) {
+            if(minimize) {
+                mParams.windowAnimations = R.style.PopupMinimizeAnimation;
+                windowManager.updateViewLayout(mRootView, mParams);
+            }
             windowManager.removeView(mRootView);
             mIsWindowShown = false;
         }
@@ -95,7 +101,7 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
      */
     @Override
     public void exit(){
-        hide();
+        hide(false);
         stopSelf();
     }
 

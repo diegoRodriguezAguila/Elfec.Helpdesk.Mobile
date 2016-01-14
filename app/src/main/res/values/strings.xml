@@ -5,6 +5,9 @@
     <string name="lbl_reject_reason">Motivo de rechazo</string>
     <string name="msg_no_reject_reason">El motivo de rechazo no puede estar en blanco</string>
 
+    <string name="title_processing_approval">Elfec Mesa de Ayuda</string>
+    <string name="msg_processing_approval">Procesando su solicitud, espere porfavor&#8230;</string>
+
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_ok">Aceptar</string>
     <string name="btn_approve">Aprobar</string>
