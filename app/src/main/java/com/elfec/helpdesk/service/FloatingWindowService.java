@@ -46,7 +46,8 @@ public class FloatingWindowService extends Service implements IFloatingWindowSer
      * Pone el touch listener a los campos necesarios
      */
     private void setTouchListener() {
-        mParams = new WindowManager.LayoutParams(380,
+        float width = getResources().getDimension(R.dimen.floating_window_width);
+        mParams = new WindowManager.LayoutParams((int) width,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,

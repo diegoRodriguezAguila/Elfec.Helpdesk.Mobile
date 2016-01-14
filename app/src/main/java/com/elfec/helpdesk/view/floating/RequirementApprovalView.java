@@ -133,7 +133,6 @@ public class RequirementApprovalView extends AbstractFloatingWindowView
             @Override
             public void onClick(View v) {
                 if (ButtonClicksHelper.canClickButton()) {
-                    getService().hide(true);
                     if (rbtnApprove.isChecked())
                         presenter.approveRequirement();
                     else presenter.rejectRequirement();
@@ -190,6 +189,7 @@ public class RequirementApprovalView extends AbstractFloatingWindowView
 
     @Override
     public void showProcessing() {
+        getService().hide(true);
         final Context context = getContext();
         builder = new NotificationCompat.Builder(context);
         builder.setOngoing(true)
