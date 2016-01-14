@@ -56,7 +56,8 @@ public class RequirementApprovalPresenter {
      * @param requirementApproval request de aprobación/rechazo
      */
     private void updateApprovalStatus(RequirementApproval requirementApproval) {
-        mView.showProcessing();
+        mView.showProcessing(R.string.title_processing_approval,
+                R.string.msg_processing_approval);
         RequirementManager.updateApprovalStatus(mRequirementId, requirementApproval,
                 new Callback<Requirement>() {
                     @Override

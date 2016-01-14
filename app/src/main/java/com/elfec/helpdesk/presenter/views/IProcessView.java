@@ -8,14 +8,14 @@ import android.support.annotation.StringRes;
 public interface IProcessView<TResult> {
     /**
      * Muestra un mensaje de error al usuario. Se debería esconder la vista
-     * que se haya mostrado previamente con {@link #showProcessing()}
+     * que se haya mostrado previamente con {@link #showProcessing(int,int)}
      * @param title recurso de id string del titulo del mensaje
      * @param message el mensaje
      */
     void setError(@StringRes int title, String message);
     /**
      * Muestra un mensaje de error al usuario. Se debería esconder la vista
-     * que se haya mostrado previamente con {@link #showProcessing()}
+     * que se haya mostrado previamente con {@link #showProcessing(int,int)}
      * @param title recurso de id string del titulo del mensaje
      * @param message el mensaje
      */
@@ -24,12 +24,12 @@ public interface IProcessView<TResult> {
     /**
      * Muestra un mensaje de espera al usuario
      */
-    void showProcessing();
+    void showProcessing(@StringRes int title, @StringRes int message);
 
     /**
      * Mensaje que se muestra cuando se finalizo el procesamiento
      * de la solicitud exitosamente. Se debería esconder la vista
-     * que se haya mostrado previamente con {@link #showProcessing()}
+     * que se haya mostrado previamente con {@link #showProcessing(int,int)}
      */
     void setResult(TResult result);
 }

@@ -8,6 +8,12 @@
     <string name="title_processing_approval">Elfec Mesa de Ayuda</string>
     <string name="msg_processing_approval">Procesando su solicitud, espere porfavor&#8230;</string>
 
+    <string name="title_req_approval_success">Solicitud completada</string>
+    <string name="msg_req_approval_success"><Data><![CDATA[ El requerimiento <b>%1$s</b> fue %2$s
+        exitosamente!]]> </Data></string>
+    <string name="req_approved">aprobado</string>
+    <string name="req_rejected">rechazado</string>
+
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_ok">Aceptar</string>
     <string name="btn_approve">Aprobar</string>
