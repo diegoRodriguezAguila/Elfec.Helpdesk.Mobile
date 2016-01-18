@@ -70,12 +70,12 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:counterEnabled="true"
-            app:counterMaxLength="300" >
+            app:counterMaxLength="200" >
 
             <android.support.v7.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="300"
+                android:maxLength="200"
                 android:inputType="textMultiLine"
                 android:fadeScrollbars="false"
                 android:hint="@string/lbl_reject_reason"
