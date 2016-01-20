@@ -39,7 +39,7 @@ class SignatureManager {
 				return null;
 			MessageDigest md = MessageDigest.getInstance("SHA");
 			md.update(info.signatures[0].toByteArray());
-			return Base64.encodeToString(md.digest(), Base64.DEFAULT).replace("\n", "");
+			return Base64.encodeToString(md.digest(), Base64.NO_WRAP);
 		} catch (NameNotFoundException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

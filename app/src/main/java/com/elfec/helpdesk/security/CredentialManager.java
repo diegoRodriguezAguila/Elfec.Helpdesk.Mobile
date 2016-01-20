@@ -7,9 +7,6 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import com.elfec.helpdesk.model.security.HelpdeskApiCredential;
-import com.scottyab.aescrypt.AESCrypt;
-
-import java.security.GeneralSecurityException;
 
 /**
  * Se encarga de la logica de generar credenciales de webservices
@@ -27,29 +24,25 @@ public class CredentialManager {
     /**
      * Genera los credenciales necesarios para realizar la autenticación del usuario
      * y dispositivo con la API del servidor
+     *
      * @return credenciales
      */
     public HelpdeskApiCredential generateApiCredentials() {
         SignatureManager sm = new SignatureManager(context);
-        Sha256 sha256 = new Sha256();
         String deviceIdentifier = getDeviceIdentifier();
-        return new HelpdeskApiCredential(deviceIdentifier, generateToken(deviceIdentifier, sha256.getHashString(sm
-                .getSignatureString())));
+        return new HelpdeskApiCredential(deviceIdentifier, generateToken(deviceIdentifier, Sha256
+                .hexHash(sm.getSignatureString())));
     }
 
     /***
      * Generates the Helpdesk Token
+     *
      * @param deviceIdentifier device Id
-     * @param hashedSignature hashed app signature
+     * @param hashedSignature  hashed app signature
      * @return generated Token
      */
-    private String generateToken(String deviceIdentifier, String hashedSignature){
-        try {
-            return AESCrypt.encrypt(deviceIdentifier, hashedSignature);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-        return null;
+    private String generateToken(String deviceIdentifier, String hashedSignature) {
+        return Sha256.base64Hash(deviceIdentifier + hashedSignature);
     }
 
     /**

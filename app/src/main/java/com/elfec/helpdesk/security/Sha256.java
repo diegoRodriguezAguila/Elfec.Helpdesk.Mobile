@@ -1,5 +1,7 @@
 package com.elfec.helpdesk.security;
 
+import android.util.Base64;
+
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,12 +12,16 @@ import java.security.NoSuchAlgorithmException;
  *
  */
 public class Sha256 {
+    /**
+     * This class can't be instantiated
+     */
+    private Sha256(){}
 	/**
 	 * Obtiene el hash sha256 de la cadena provista
 	 * @param str str
 	 * @return array de bytes equivalentes al hash
 	 */
-	public byte[] getHash(String str)
+	public static byte[] hash(String str)
 	{
 		MessageDigest md;
 		try {
@@ -34,8 +40,11 @@ public class Sha256 {
      * @param str str
      * @return hash of the string as a string
      */
-    public String getHashString(String str){
-        return new String(getHash(str), Charset.forName("UTF-8"));
+    public static String hashString(String str){
+        byte[] hash = hash(str);
+        if(hash==null)
+            return null;
+        return new String(hash, Charset.forName("UTF-8"));
     }
 
 	/**
@@ -43,8 +52,17 @@ public class Sha256 {
 	 * @param str str
 	 * @return hex string representing this hash's value
 	 */
-	public String getHexHash(String str){
-		return bytesToHex(getHash(str));
+	public static String hexHash(String str){
+		return bytesToHex(hash(str));
+	}
+
+    /**
+     * Wrapper method for getting the hash of string as a Base64 encoded string
+     * @param str str
+     * @return Base64 encoded hash of the string
+     */
+	public static String base64Hash(String str){
+        return Base64.encodeToString(hash(str), Base64.NO_WRAP);
 	}
 	
 	/**
@@ -52,7 +70,7 @@ public class Sha256 {
 	 * @param bytes bytes
 	 * @return cadena hex
 	 */
-	public String bytesToHex(byte[] bytes) {
+	public static String bytesToHex(byte[] bytes) {
         StringBuilder result = new StringBuilder();
         for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
         return result.toString();
